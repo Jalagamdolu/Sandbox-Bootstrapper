@@ -1,0 +1,79 @@
+{
+  "version": "1.0.0",
+  "environment": "MOCK / LOCAL ONLY",
+  "templates": [
+    {
+      "id": "python-fastapi-service",
+      "name": "Python FastAPI Service",
+      "description": "Local mock FastAPI microservice with synthetic data and health check",
+      "available": true,
+      "default_port": 8080,
+      "required_fixtures": ["users.json", "teams.json", "projects.json", "configs.json"],
+      "allowed_scopes": ["sandbox:read", "sandbox:create", "sandbox:delete", "data:seed:synthetic", "test:execute", "audit:read"]
+    },
+    {
+      "id": "node-microservice",
+      "name": "Node.js Express Microservice",
+      "description": "Local mock Node.js service template",
+      "available": true,
+      "default_port": 3000,
+      "required_fixtures": ["users.json", "configs.json"],
+      "allowed_scopes": ["sandbox:read", "sandbox:create", "sandbox:delete", "data:seed:synthetic", "test:execute", "audit:read"]
+    },
+    {
+      "id": "react-client",
+      "name": "React Client Dashboard",
+      "description": "Local mock frontend client dashboard",
+      "available": true,
+      "default_port": 5173,
+      "required_fixtures": ["users.json", "projects.json"],
+      "allowed_scopes": ["sandbox:read", "sandbox:create", "sandbox:delete", "test:execute", "audit:read"]
+    },
+    {
+      "id": "data-pipeline",
+      "name": "Data Pipeline Runner",
+      "description": "Local mock synthetic data ingestion and batch job pipeline",
+      "available": true,
+      "default_port": 9000,
+      "required_fixtures": ["users.json", "teams.json", "projects.json", "configs.json"],
+      "allowed_scopes": ["sandbox:read", "sandbox:create", "sandbox:delete", "data:seed:synthetic", "test:execute", "audit:read"]
+    }
+  ],
+  "mock_resources": [
+    {
+      "resource_id": "mock-sqlite-db",
+      "type": "database",
+      "name": "Local SQLite Database",
+      "status": "AVAILABLE",
+      "connection_mode": "local_file"
+    },
+    {
+      "resource_id": "mock-dashboard-console",
+      "type": "dashboard",
+      "name": "Mock Developer Console",
+      "status": "AVAILABLE",
+      "connection_mode": "simulated"
+    },
+    {
+      "resource_id": "mock-synthetic-fixtures",
+      "type": "fixtures",
+      "name": "Synthetic Fixtures Library",
+      "status": "AVAILABLE",
+      "fixture_count": 4
+    },
+    {
+      "resource_id": "cloud-aws-rds",
+      "type": "cloud_database",
+      "name": "AWS Relational Database Service",
+      "status": "UNAVAILABLE",
+      "warning": "Real cloud infrastructure is prohibited in local mock environment. Use mock-sqlite-db instead."
+    },
+    {
+      "resource_id": "cloud-production-idp",
+      "type": "identity_provider",
+      "name": "Enterprise SAML/OIDC IdP",
+      "status": "UNAVAILABLE",
+      "warning": "External cloud identity providers are prohibited. Use local token service."
+    }
+  ]
+}
