@@ -7,16 +7,25 @@ Provides human-in-the-loop review, gated approval controls, and full audit visib
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
+# Ensure repository root is on sys.path so 'src' packages resolve regardless of
+# execution context (e.g. Streamlit Community Cloud launching from 'src/ui/app.py').
+_repo_root = Path(__file__).resolve().parent.parent.parent
+if str(_repo_root) not in sys.path:
+    sys.path.insert(0, str(_repo_root))
+
 import json
 import sqlite3
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import Any
 
 import streamlit as st
 
 from src.agents.discovery import DiscoveryAgent
 from src.core.config import get_settings
+from src.storage.db_init import initialize_database
 from src.core.exceptions import (
     ApprovalError,
     BootstrapError,
@@ -395,6 +404,7 @@ def get_all_approver_tokens() -> list[dict[str, Any]]:
 
 @st.cache_resource
 def get_services() -> tuple[WorkflowOrchestrator, ApprovalService, TokenService, AuditChainService]:
+    initialize_database()
     approval_svc = ApprovalService()
     token_svc = TokenService()
     audit_svc = AuditChainService()

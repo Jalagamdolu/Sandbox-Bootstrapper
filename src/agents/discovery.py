@@ -48,7 +48,15 @@ class DiscoveryAgent:
     """Agent 2: Discovers available mock resources and identifies missing dependencies."""
 
     def __init__(self, catalog_path: Path | str | None = None) -> None:
-        self.catalog_path = Path(catalog_path or "data/mock_resources.json")
+        if catalog_path is not None:
+            self.catalog_path = Path(catalog_path)
+        else:
+            default_p = Path("data/mock_resources.json")
+            if default_p.exists():
+                self.catalog_path = default_p
+            else:
+                fallback_p = Path(__file__).resolve().parent.parent.parent / "data" / "mock_resources.json"
+                self.catalog_path = fallback_p if fallback_p.exists() else default_p
 
     def discover(
         self,

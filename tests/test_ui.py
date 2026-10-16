@@ -228,3 +228,41 @@ def test_ui_components_rendering(monkeypatch: pytest.MonkeyPatch):
          patch.object(st, "success") as mock_aud_suc:
         tab_audit_and_cleanup(orchestrator, audit_svc, token_svc)
         assert mock_aud_suc.called
+
+
+def test_streamlit_cloud_subfolder_import_resolution():
+    """Verify that src/ui/app.py dynamically adds repo root to sys.path and imports without error."""
+    import importlib
+    import sys
+    from pathlib import Path
+
+    repo_root = str(Path(__file__).resolve().parent.parent)
+
+    original_path = list(sys.path)
+    try:
+        # Simulate Streamlit Cloud: remove repo root and ensure only site-packages/subfolder exist
+        sys.path = [p for p in sys.path if p != repo_root and not p.endswith("Sandbox-Bootstrapper")]
+
+        import src.ui.app
+        importlib.reload(src.ui.app)
+
+        # Assert repo root was added to sys.path by app.py
+        assert any(Path(p).resolve() == Path(repo_root).resolve() for p in sys.path)
+        assert hasattr(src.ui.app, "main")
+        assert hasattr(src.ui.app, "DiscoveryAgent")
+    finally:
+        sys.path = original_path
+
+
+def test_streamlit_app_root_entrypoint():
+    """Verify that root streamlit_app.py imports cleanly and exports callable main."""
+    import streamlit_app
+    assert hasattr(streamlit_app, "main")
+    assert callable(streamlit_app.main)
+
+
+def test_discovery_agent_catalog_path_resilience():
+    """Verify DiscoveryAgent locates mock_resources.json even with non-standard CWD."""
+    from src.agents.discovery import DiscoveryAgent
+    agent = DiscoveryAgent()
+    assert agent.catalog_path.exists()
