@@ -231,9 +231,6 @@ def render_page_header(title: str, subtitle: str) -> None:
                 <div class="page-title">{title}</div>
                 <div class="page-subtitle">{subtitle}</div>
             </div>
-            <div>
-                <span class="badge-env">LOCAL · MOCK ONLY</span>
-            </div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -1158,9 +1155,6 @@ def main() -> None:
             <div style="padding: 1rem 0; border-bottom: 1px solid #1F2937; margin-bottom: 1rem;">
                 <div style="font-size: 1.15rem; font-weight: 700; color: #FFFFFF; line-height: 1.2;">Bootstrapper</div>
                 <div style="font-size: 0.75rem; color: #64748B; margin-top: 0.2rem;">Developer Sandbox Console</div>
-                <div style="margin-top: 0.75rem;">
-                    <span class="badge-env">LOCAL · MOCK ONLY</span>
-                </div>
             </div>
             """,
             unsafe_allow_html=True,
